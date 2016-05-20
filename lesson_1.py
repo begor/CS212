@@ -33,7 +33,8 @@ def card_ranks(cards):
     """Return a list of the ranks, sorted with higher first."""
     ranks = ['--23456789TJQKA'.index(r) for r, s in cards]
     ranks.sort(reverse=True)
-    return ranks
+    # Check if cards forms ace low straight
+    return [5, 4, 3, 2, 1] if ranks == [14, 5, 4, 3, 2] else ranks
 
 
 def straight(ranks):
@@ -78,8 +79,10 @@ def test():
     fk = "9D 9H 9S 9C 7D".split()
     fh = "TD TC TH 7C 7D".split()
     tp = "TD 9H TH 9C 3S".split()
+    al = "AC 2D 4H 3D 5S".split()
     fkranks = card_ranks(fk)
     tpranks = card_ranks(tp)
+    assert straight(card_ranks(al))
     assert card_ranks(sf) == [10, 9, 8, 7, 6]
     assert card_ranks(fk) == [9, 9, 9, 9, 7]
     assert card_ranks(fh) == [10, 10, 10, 7, 7]
