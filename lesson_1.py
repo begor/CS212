@@ -38,13 +38,25 @@ def card_ranks(cards):
 
 def straight(ranks):
     """Return True if the ordered ranks form a 5-card straight."""
-    return (max(ranks) - min(ranks) == 4) amd len(set(ranks)) == 5
+    return (max(ranks) - min(ranks) == 4) and len(set(ranks)) == 5
 
 
 def flush(hand):
     """Return True if all the cards have the same suit."""
     suites = [s for r, s in hand]
     return len(set(suites)) == 1
+
+
+def kind(n, ranks):
+    """
+    Find rank that appears n times in ranks.
+
+    Return the first rank that this hand has exactly n of.
+    Return None if there is no n-of-a-kind in the hand.
+    """
+    for r in ranks:
+        if ranks.count(r) == n:
+            return r
 
 
 def test():
