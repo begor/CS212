@@ -2,12 +2,10 @@
 
 import random
 
-mydeck = [r+s for r in '23456789TJQKA' for s in 'SHDC']
 
-
-def deal(numhands, n=5, deck=mydeck):
+def deal(numhands, n=5, deck=[r+s for r in '23456789TJQKA' for s in 'SHDC']):
     """Return numhands for n cards each from deck."""
-    return [random.sample(deck, n)] * numhands
+    return [random.sample(deck, n) for i in range(numhands)]
 
 
 def poker(hands):
