@@ -29,14 +29,20 @@ def hand_rank(hand):
     def unzip(pairs):
         return zip(*pairs)
 
-    groups = group(['--23456789TJQKA'.index(r) for r, s in hand])
+    rankings = {(5,): 10,
+                (4, 1): 7,
+                (3, 2): 6,
+                (3, 1, 1): 3,
+                (2, 2, 1): 2,
+                (2, 1, 1, 1): 1,
+                (1, 1, 1, 1, 1): 0}
+
+    ranks_in_hand = ['--23456789TJQKA'.index(r) for r, s in hand]
+    groups = group(ranks_in_hand)
     counts, ranks = unzip(groups)
-    if ranks == (14, 5, 4, 3, 2):  # Check if ace is first
-        ranks = (5, 4, 3, 2, 1)
+    ranks = (5, 4, 3, 2, 1) if ranks == (14, 5, 4, 3, 2) else ranks
     straight = len(ranks) == 5 and max(ranks) - min(ranks) == 4
     flush = len(set([s for r, s in hand])) == 1
-    rankings = {(5,): 10, (4, 1): 7, (3, 2): 6, (3, 1, 1): 3,
-                (2, 2, 1): 2, (2, 1, 1, 1): 1, (1, 1, 1, 1, 1): 0}
     straight_flush = 4 * straight + 5 * flush
     return max(rankings[counts], straight_flush), ranks
 
