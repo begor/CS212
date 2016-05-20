@@ -36,6 +36,17 @@ def card_ranks(cards):
     return ranks
 
 
+def straight(ranks):
+    """Return True if the ordered ranks form a 5-card straight."""
+    return (max(ranks) - min(ranks) == 4) amd len(set(ranks)) == 5
+
+
+def flush(hand):
+    """Return True if all the cards have the same suit."""
+    suites = [s[1] for s in hand.split()]
+    return len(set(suites)) == 1
+
+
 def test():
     """Test cases for the functions in poker program."""
     sf = "6C 7C 8C 9C TC".split()
