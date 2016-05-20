@@ -43,7 +43,7 @@ def straight(ranks):
 
 def flush(hand):
     """Return True if all the cards have the same suit."""
-    suites = [s[1] for s in hand.split()]
+    suites = [s for r, s in hand]
     return len(set(suites)) == 1
 
 
