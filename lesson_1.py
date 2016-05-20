@@ -77,6 +77,9 @@ def test():
     sf = "6C 7C 8C 9C TC".split()
     fk = "9D 9H 9S 9C 7D".split()
     fh = "TD TC TH 7C 7D".split()
+    tp = "TD 9H TH 9C 3S".split()
+    fkranks = card_ranks(fk)
+    tpranks = card_ranks(tp)
     assert card_ranks(sf) == [10, 9, 8, 7, 6]
     assert card_ranks(fk) == [9, 9, 9, 9, 7]
     assert card_ranks(fh) == [10, 10, 10, 7, 7]
@@ -88,6 +91,11 @@ def test():
     assert hand_rank(sf) == (8, 10)
     assert hand_rank(fk) == (7, 9, 7)
     assert hand_rank(fh) == (6, 10, 7)
+    assert kind(4, fkranks) == 9
+    assert kind(3, fkranks) is None
+    assert kind(2, fkranks) is None
+    assert kind(1, fkranks) == 7
+    assert two_pair(tpranks) == (10, 9)
     return 'tests passed'
 
 
