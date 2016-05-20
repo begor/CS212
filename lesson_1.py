@@ -59,6 +59,19 @@ def kind(n, ranks):
             return r
 
 
+def two_pair(ranks):
+    """
+    Assume if there are two pairs in ranks.
+
+    If there are two pair, return the two ranks as a
+    tuple: (highest, lowest); otherwise return None.
+    """
+    pair = kind(2, ranks)
+    lower_pair = kind(2, list(reversed(ranks)))
+    if pair and lower_pair != pair:
+        return pair, lower_pair
+
+
 def test():
     """Test cases for the functions in poker program."""
     sf = "6C 7C 8C 9C TC".split()
