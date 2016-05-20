@@ -29,6 +29,13 @@ def hand_rank(hand):
         return (0, ranks)
 
 
+def card_ranks(cards):
+    """Return a list of the ranks, sorted with higher first."""
+    ranks = ['--23456789TJQKA'.index(r) for r, s in cards]
+    ranks.sort(reverse=True)
+    return ranks
+
+
 def test():
     """Test cases for the functions in poker program."""
     sf = "6C 7C 8C 9C TC".split()
