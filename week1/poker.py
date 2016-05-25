@@ -55,18 +55,6 @@ def group(items):
 
 def test():
     """Test cases for the functions in poker program."""
-    sf1 = "6C 7C 8C 9C TC".split()
-    sf2 = "6D 7D 8D 9D TD".split()
-    fk = "9D 9H 9S 9C 7D".split()
-    fh = "TD TC TH 7C 7D".split()
-    tp = "TD 9H TH 9C 3S".split()
-    al = "AC 2D 4H 3D 5S".split()
-    assert poker([sf1, fk, fh]) == [sf1]
-    assert poker([sf1, sf2, fk, fh]) == [sf1, sf2]
-    assert poker([fk, fh]) == [fk]
-    assert poker([fh, fh]) == [fh, fh]
-    assert poker([fh]) == [fh]
-    assert poker(100 * [fh]) == 100 * [fh]
-    return 'tests passed'
+
 
 print(test())
