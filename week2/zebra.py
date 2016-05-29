@@ -67,9 +67,7 @@ def timedcalls(n, fn, *args):
     if isinstance(n, int):
         times = [timedcall(fn, *args)[0] for _ in range(n)]
     else:
-        clock, times = 0, []
-        while clock < n:
-            experiment = timedcall(fn, *args)[0]
-            clock += experiment
-            times.append(experiment)
+        times = []
+        while sum(times) < n:
+            times.append(timedcall(fn, *args)[0])
     return min(times), average(times), max(times)
