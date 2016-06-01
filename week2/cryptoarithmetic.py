@@ -13,7 +13,7 @@ def solve(formula):
 
 def fill_in(formula):
     "Generate all possible fillings-in of letters in formula with digits."
-    letters = ''.join(s for s in formula if s.isalpha())
+    letters = ''.join({s for s in formula if s.isalpha()})
     for digits in itertools.permutations('1234567890', len(letters)):
         table = str.maketrans(letters, ''.join(digits))
         yield formula.translate(table)
