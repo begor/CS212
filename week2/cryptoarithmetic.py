@@ -76,5 +76,3 @@ def faster_solve(formula):
                 return formula.translate(table)
         except ArithmeticError:
             pass
-
-print(faster_solve('ODD + ODD == EVEN'))
