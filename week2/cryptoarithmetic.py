@@ -26,7 +26,7 @@ def compile_word(word):
 
 
 def fill_in(formula):
-    "Generate all possible fillings-in of letters in formula with digits."
+    """Generate all possible fillings-in of letters in formula with digits."""
     letters = ''.join({s for s in formula if s.isalpha()})
     for digits in itertools.permutations('1234567890', len(letters)):
         table = str.maketrans(letters, ''.join(digits))
@@ -34,11 +34,11 @@ def fill_in(formula):
 
 
 def valid(f):
-    """Formula f is valid if and only if it has no
-    numbers with leading zero, and evals true."""
+    """
+    Formula f is valid if and only if it has no
+    numbers with leading zero, and evals true.
+    """
     try:
         return not re.search(r'\b0[0-9]', f) and eval(f) is True
     except ArithmeticError:
         return False
-
-print(compile_word('YOU'))
