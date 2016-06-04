@@ -11,6 +11,20 @@ def solve(formula):
             return f
 
 
+def compile_word(word):
+    """
+    Compile a word of uppercase letters as numeric digits.
+
+    E.g., compile_word('YOU') => '(1*U+10*O+100*Y)'
+    Non-uppercase words unchanged: compile_word('+') => '+'
+    """
+    if word.isupper():
+        upper_with_order = ['{}*{}'.format(str(10**exp), digit)
+                            for exp, digit in enumerate(reversed(word))]
+        return '+'.join(upper_with_order)
+    return word
+
+
 def fill_in(formula):
     "Generate all possible fillings-in of letters in formula with digits."
     letters = ''.join({s for s in formula if s.isalpha()})
@@ -27,4 +41,4 @@ def valid(f):
     except ArithmeticError:
         return False
 
-print(solve('ODD + ODD == EVEN'))
+print(compile_word('YOU'))
