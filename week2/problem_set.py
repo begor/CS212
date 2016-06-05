@@ -61,4 +61,17 @@ def floor_puzzle():
             return [Hopper, Kay, Liskov, Perlis, Ritchie]
 
 
-print(floor_puzzle())
+def longest_subpalindrome_slice(text):
+    """Return (i, j) such that text[i:j] is the longest palindrome in text."""
+    text = text.lower()
+    longest_start = longest_end = 0
+    longest = ''
+    is_palindrome = lambda text: text == text[::-1]
+    for i, first in enumerate(text):
+        text_slice = first
+        for j, second in enumerate(text[i+1:], i+2):
+            text_slice += second
+            if is_palindrome(text_slice):
+                if len(longest) < len(text_slice):
+                    longest, longest_start, longest_end = text_slice, i, j
+    return longest_start, longest_end
