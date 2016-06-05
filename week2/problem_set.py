@@ -63,15 +63,18 @@ def floor_puzzle():
 
 def longest_subpalindrome_slice(text):
     """Return (i, j) such that text[i:j] is the longest palindrome in text."""
+    if not text:
+        return 0, 0
     text = text.lower()
-    longest_start = longest_end = 0
-    longest = ''
-    is_palindrome = lambda text: text == text[::-1]
-    for i, first in enumerate(text):
-        text_slice = first
-        for j, second in enumerate(text[i+1:], i+2):
-            text_slice += second
-            if is_palindrome(text_slice):
-                if len(longest) < len(text_slice):
-                    longest, longest_start, longest_end = text_slice, i, j
-    return longest_start, longest_end
+    length = lambda slice: slice[1] - slice[0]
+    variants = [grow(text, start, end)
+                for start in range(len(text))
+                for end in (start, start+1)]
+    return max(variants, key=length)
+
+def grow(text, start, end):
+    while(start > 0 and
+          end < len(text) and
+          text[start-1] == text[end]):
+        start, end = start - 1, end + 1
+    return (start, end)
