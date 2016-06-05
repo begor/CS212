@@ -48,9 +48,17 @@ def floor_puzzle():
     Ritchie does not live on a floor adjacent to Liskov's.
     Liskov does not live on a floor adjacent to Kay's.
     """
-    floor_permutations = itertools.permutations(range(1, 6))
+    floors = bottom, _, _, _, top = range(1, 6)
+    floor_permutations = itertools.permutations(floors)
+    not_adjacent = lambda f1, f2: abs(Ritchie - Liskov) == 1
     for (Hopper, Kay, Liskov, Perlis, Ritchie) in floor_permutations:
-        if (Kay != 1 and Hopper != 5 and
-            Liskov not in (1, 5) and Perlis > Kay and
-            abs(Ritchie - Liskov) > 1 and abs(Liskov - Kay) > 1):
+        if (Kay is not bottom and
+            Hopper is not top and
+            Liskov not in (top, bottom) and
+            Perlis > Kay and
+            not_adjacent(Ritchie, Liskov) and
+            not_adjacent(Liskov, Kay)):
             return [Hopper, Kay, Liskov, Perlis, Ritchie]
+
+
+print(floor_puzzle())
