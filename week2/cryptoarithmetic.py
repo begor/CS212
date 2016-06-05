@@ -38,10 +38,11 @@ def compile_word(word):
     Non-uppercase words unchanged: compile_word('+') => '+'
     """
     if word.isupper():
-        upper_with_order = ['{}*{}'.format(10**exp, digit)
-                            for exp, digit in enumerate(reversed(word))]
-        return '+'.join(upper_with_order)
-    return word
+        terms = [('%s*%s' % (10**i, d))
+                 for (i, d) in enumerate(word[::-1])]
+        return '(' + '+'.join(terms) + ')'
+    else:
+        return word
 
 
 def compile_formula(formula):
