@@ -35,3 +35,22 @@ def faster_solve(formula):
                 return formula.translate(table)
         except ArithmeticError:
             pass
+
+
+def floor_puzzle():
+    """
+    Hopper, Kay, Liskov, Perlis, and Ritchie live on
+    different floors of a five-floor apartment building.
+    Kay does not live on the bottom floor.
+    Hopper does not live on the top floor.
+    Liskov does not live on either the top or the bottom floor.
+    Perlis lives on a higher floor than does Kay.
+    Ritchie does not live on a floor adjacent to Liskov's.
+    Liskov does not live on a floor adjacent to Kay's.
+    """
+    floor_permutations = itertools.permutations(range(1, 6))
+    for (Hopper, Kay, Liskov, Perlis, Ritchie) in floor_permutations:
+        if (Kay != 1 and Hopper != 5 and
+            Liskov not in (1, 5) and Perlis > Kay and
+            abs(Ritchie - Liskov) > 1 and abs(Liskov - Kay) > 1):
+            return [Hopper, Kay, Liskov, Perlis, Ritchie]
