@@ -25,7 +25,7 @@ def seq(x, y):
 
 
 def alt(x, y):
-    return lambda text: set(x(text)) | set(y(text))
+    return lambda text: x(text) | y(text)
 
 
 null = frozenset([])
