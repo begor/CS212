@@ -1,3 +1,56 @@
+def search(pattern, text):
+    "Match pattern anywhere in text; return longest earliest match or None."
+    for i in range(len(text)):
+        m = match(pattern, text[i:])
+        if m is not None:
+            return m
+
+
+def match(pattern, text):
+    "Match pattern against start of text; return longest match found or None."
+    remainders = matchset(pattern, text)
+    if remainders:
+        shortest = min(remainders, key=len)
+        """
+            If there is a remainder, we return text before it
+            If there isn't, if seems that there is no remainder at all
+            And we should return all the text, cause it's matches the pattern
+        """
+        return text[:len(text)-len(shortest)]
+
+
+def components(pattern):
+    "Return the op, x, and y arguments; x and y are None if missing."
+    x = pattern[1] if len(pattern) > 1 else None
+    y = pattern[2] if len(pattern) > 2 else None
+    return pattern[0], x, y
+
+
+def matchset(pattern, text):
+    "Match pattern at start of text; return a set of remainders of text."
+    op, x, y = components(pattern)
+    if 'lit' == op:
+        return set([text[len(x):]]) if text.startswith(x) else null
+    elif 'seq' == op:
+        return set(t2 for t1 in matchset(x, text) for t2 in matchset(y, t1))
+    elif 'alt' == op:
+        return matchset(x, text) | matchset(y, text)
+    elif 'dot' == op:
+        return set([text[1:]]) if text else null
+    elif 'oneof' == op:
+        return set([text[1:]]) if text.startswith(x) else null
+    elif 'eol' == op:
+        return set(['']) if text == '' else null
+    elif 'star' == op:
+        return (set([text]) |
+                set(t2 for t1 in matchset(x, text)
+                    for t2 in matchset(pattern, t1) if t1 != text))
+    else:
+        raise ValueError('unknown pattern: %s' % pattern)
+
+null = frozenset()
+
+
 def lit(string):
     return ('lit', string)
 
@@ -29,38 +82,6 @@ dot = ('dot',)
 eol = ('eol',)
 
 
-def matchset(pattern, text):
-    "Match pattern at start of text; return a set of remainders of text."
-    op, x, y = components(pattern)
-    if 'lit' == op:
-        return set([text[len(x):]]) if text.startswith(x) else null
-    elif 'seq' == op:
-        return set(t2 for t1 in matchset(x, text) for t2 in matchset(y, t1))
-    elif 'alt' == op:
-        return matchset(x, text) | matchset(y, text)
-    elif 'dot' == op:
-        return set([text[1:]]) if text else null
-    elif 'oneof' == op:
-        return set([text[1:]]) if text.startswith(x) else null
-    elif 'eol' == op:
-        return set(['']) if text == '' else null
-    elif 'star' == op:
-        return (set([text]) |
-                set(t2 for t1 in matchset(x, text)
-                    for t2 in matchset(pattern, t1) if t1 != text))
-    else:
-        raise ValueError('unknown pattern: %s' % pattern)
-
-null = frozenset()
-
-
-def components(pattern):
-    "Return the op, x, and y arguments; x and y are None if missing."
-    x = pattern[1] if len(pattern) > 1 else None
-    y = pattern[2] if len(pattern) > 2 else None
-    return pattern[0], x, y
-
-
 def test():
     assert lit('abc') == ('lit', 'abc')
     assert seq(('lit', 'a'),
@@ -85,7 +106,10 @@ def test():
     assert matchset(('eol',), 'not end of line') == frozenset([])
     assert matchset(('star', ('lit', 'hey')), 'heyhey!') == set(
         ['!', 'heyhey!', 'hey!'])
-
+    assert match(('star', ('lit', 'a')), 'aaabcd') == 'aaa'
+    assert match(('alt', ('lit', 'b'), ('lit', 'c')), 'ab') == None
+    assert match(('alt', ('lit', 'b'), ('lit', 'a')), 'ab') == 'a'
+    assert search(('alt', ('lit', 'b'), ('lit', 'c')), 'ab') == 'b'
     return 'tests pass'
 
 print(test())
