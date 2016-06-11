@@ -22,7 +22,7 @@ def plus(x):
 
 
 def oneof(chars):
-    return lambda Ns: set([c for c in chars]) if 1 in Ns else null
+    return lambda Ns: set(chars) if 1 in Ns else null
 
 
 def seq(x, y):
