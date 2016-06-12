@@ -43,6 +43,9 @@ def genseq(x, y, Ns, startx=0):
 
 def test():
 
+    def N(hi):
+        return set(range(hi+1))
+
     f = lit('hello')
     assert f(set([1, 2, 3, 4, 5])) == set(['hello'])
     assert f(set([1, 2, 3, 4])) == null
@@ -54,6 +57,8 @@ def test():
     h = oneof('theseletters')
     assert h(set([1, 2, 3])) == set(['t', 'h', 'e', 's', 'l', 'r'])
     assert h(set([2, 3, 4])) == null
+    assert star(oneof('ab'))(N(2)) == set(['', 'a', 'aa', 'ab', 'ba',
+                                           'bb', 'b'])
 
     return 'tests pass'
 
