@@ -45,3 +45,31 @@ def countcalls(fn):
         return fn(*args)
     callcounts[_f] = 0
     return _f
+
+
+@decorator
+def trace(f):
+    indent = '   '
+
+    def _f(*args):
+        signature = '{}({})'.format(f.__name__, ', '.join(map(repr, args)))
+        print('{}--> {}'.format(trace.level * indent, signature))
+        trace.level += 1
+        try:
+            result = f(*args)
+            print('{}<-- {} == {}'.format((trace.level - 1) * indent,
+                                          signature, result))
+        finally:
+            trace.level -= 1
+
+        return result
+    trace.level = 0
+    return _f
+
+
+@trace
+def fib(n):
+    if n == 0 or n == 1:
+        return 1
+    else:
+        return fib(n - 1) + fib(n - 2)
