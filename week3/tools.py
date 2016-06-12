@@ -33,3 +33,15 @@ def memo(fn):
         except TypeError:  # in the case that args is unhashable
             return _f(*args)
     return _f
+
+
+callcounts = {}
+
+
+@decorator
+def countcalls(fn):
+    def _f(*args):
+        callcounts[_f] += 1
+        return fn(*args)
+    callcounts[_f] = 0
+    return _f
