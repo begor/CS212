@@ -67,6 +67,13 @@ def trace(f):
     return _f
 
 
+def disabled(f):
+    return f
+
+
+trace = disabled
+
+
 @trace
 def fib(n):
     if n == 0 or n == 1:
