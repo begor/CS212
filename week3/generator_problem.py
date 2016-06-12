@@ -1,10 +1,3 @@
-# --------------
-# User Instructions
-#
-# Complete the code for the compiler by completing the constructor
-# for the patterns alt(x, y) and oneof(chars).
-
-
 def lit(s):
     return lambda Ns: set([s]) if len(s) in Ns else null
 
@@ -34,6 +27,18 @@ dot = oneof('?')    # You could expand the alphabet to more chars.
 epsilon = lit('')   # The pattern that matches the empty string.
 
 null = frozenset([])
+
+
+def genseq(x, y, Ns, startx=0):
+    if not Ns:
+        return null
+
+    xmatches = x(set(range(startx, max(Ns) + 1)))
+    Ns_x = set(len(m) for m in xmatches)
+    Ns_y = set(n - m for n in Ns for m in Ns_x if n - m >= 0)
+    ymatches = y(Ns_y)
+    return set(m1 + m2 for m1 in xmatches for m2 in ymatches
+               if len(m1 + m2) in Ns)
 
 
 def test():
