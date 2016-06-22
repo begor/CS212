@@ -106,8 +106,7 @@ Fail = (None, None)
 JSON = grammar(
 r"""value => string | number | object | array | [true] | [false] | [null]
 pair => string : value
-string => ^$ | chars
-chars => ["a-zA-Z+"]
+string => "[^"]*"
 object => [{] [}] | [{] elements [}]
 array => [[] []] | [[] elements []]
 elements => value [,] elements | value
@@ -141,4 +140,9 @@ def test():
                       ['value', ['string', '"rides the rodeo"']]]]]], '}']], '')
     return 'tests pass'
 
-print(json_parse('[1, 2, 3]'))
+print(json_parse('["testing", 1, 2, 3]') == (                      
+                       ['value', ['array', '[', ['elements', ['value', 
+                       ['string', '"testing"']], ',', ['elements', ['value', ['number', 
+                       ['int', '1']]], ',', ['elements', ['value', ['number', 
+                       ['int', '2']]], ',', ['elements', ['value', ['number', 
+                       ['int', '3']]]]]]], ']']], ''))
