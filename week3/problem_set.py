@@ -104,14 +104,17 @@ def parse(start_symbol, text, grammar):
 Fail = (None, None)
 
 JSON = grammar(
-    r"""value => string | number | object | array | [true] | [false] | [null]
-    pair => string : value
-    string => ^$ | chars
-    chars => ["a-zA-Z+"]
-    object => [{] [}] | [{] elements [}]
-    array => [[] []] | [[] elements []]
-    elements => value [,] elements | value
-    number => [-+]?[0-9]+""",
+r"""value => string | number | object | array | [true] | [false] | [null]
+pair => string : value
+string => ^$ | chars
+chars => ["a-zA-Z+"]
+object => [{] [}] | [{] elements [}]
+array => [[] []] | [[] elements []]
+elements => value [,] elements | value
+number => int frac exp | int exp | int frac | int
+int => [-+]?[0-9]+
+frac => [.] int
+exp => [eE][+-]? int""",
     whitespace='\s*')
 
 
