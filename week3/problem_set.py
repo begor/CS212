@@ -1,20 +1,3 @@
-# ---------------
-# User Instructions
-#
-# In this problem, you will be using many of the tools and techniques
-# that you developed in unit 3 to write a grammar that will allow
-# us to write a parser for the JSON language. 
-#
-# You will have to visit json.org to see the JSON grammar. It is not 
-# presented in the correct format for our grammar function, so you 
-# will need to translate it.
-
-# ---------------
-# Provided functions
-#
-# These are all functions that were built in unit 3. They will help
-# you as you write the grammar.  Add your code at line 102.
-
 from functools import update_wrapper
 import re
 
@@ -105,15 +88,16 @@ Fail = (None, None)
 
 JSON = grammar(
 r"""value => string | number | object | array | [true] | [false] | [null]
-pair => string : value
+pair => string [:] value
 string => "[^"]*"
-object => [{] [}] | [{] elements [}]
+object => [{] [}] | [{] members [}]
 array => [[] []] | [[] elements []]
 elements => value [,] elements | value
+members => pair [,] members | pair
 number => int frac exp | int exp | int frac | int
 int => [-+]?[0-9]+
-frac => [.] int
-exp => [eE][+-]? int""",
+frac => [.][0-9]+
+exp => [eE][+-][0-9]+""",
     whitespace='\s*')
 
 
@@ -140,9 +124,4 @@ def test():
                       ['value', ['string', '"rides the rodeo"']]]]]], '}']], '')
     return 'tests pass'
 
-print(json_parse('["testing", 1, 2, 3]') == (                      
-                       ['value', ['array', '[', ['elements', ['value', 
-                       ['string', '"testing"']], ',', ['elements', ['value', ['number', 
-                       ['int', '1']]], ',', ['elements', ['value', ['number', 
-                       ['int', '2']]], ',', ['elements', ['value', ['number', 
-                       ['int', '3']]]]]]], ']']], ''))
+print(test())
