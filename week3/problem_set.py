@@ -87,17 +87,17 @@ def parse(start_symbol, text, grammar):
 Fail = (None, None)
 
 JSON = grammar(
-r"""value => string | number | object | array | [true] | [false] | [null]
-pair => string [:] value
+r"""value => string | number | object | array | true | false | null
+pair => string : value
 string => "[^"]*"
-object => [{] [}] | [{] members [}]
+object => { } | { members }
 array => [[] []] | [[] elements []]
-elements => value [,] elements | value
-members => pair [,] members | pair
+elements => value , elements | value
+members => pair , members | pair
 number => int frac exp | int exp | int frac | int
-int => [-+]?[0-9]+
+int => -?[1-9][0-9]*
 frac => [.][0-9]+
-exp => [eE][+-][0-9]+""",
+exp => [eE][+-]?[0-9]+""",
     whitespace='\s*')
 
 
