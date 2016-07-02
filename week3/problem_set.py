@@ -31,10 +31,6 @@ def inverse(f, delta = 1/128.):
     return f_1 
 
 
-def square(x): return x*x
-sqrt = inverse(square)
-print(sqrt(1000000))
-
 
 def grammar(description, whitespace=r'\s*'):
     """Convert a description to a grammar.  Each line is a rule for a
@@ -156,6 +152,18 @@ def test():
                       ['pair', ['string', '"state"'], ':', ['value', ['string', '"CO"']]], 
                       ',', ['members', ['pair', ['string', '"occupation"'], ':', 
                       ['value', ['string', '"rides the rodeo"']]]]]], '}']], '')
+    sqr = lambda x: x * x
+    sqrt = inverse(sqr)
+    assert sqrt(16) == 4
+    assert sqrt(100) == 10
+    assert sqrt(1000000) == 1000
+
+    pow_of_10 = lambda x: 10 ** x
+    inv = inverse(pow_of_10)
+    assert inv(10) == 1
+    assert inv(100) == 2
+    assert inv(10000000000) == 10
+
     return 'tests pass'
 
 print(test())
