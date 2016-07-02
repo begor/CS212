@@ -3,10 +3,12 @@ from functools import wraps, update_wrapper
 
 def decorator(d):
     """Makes function a decorator by copying its inner attribs."""
-    return lambda fn: update_wrapper(d(fn), fn)
-
-
-decorator = decorator(decorator)
+    def _d(fn):
+        return update_wrapper(d(fn), fn)
+    update_wrapper(_d, d)
+    return _d
+    # or: return lambda fn: update_wrapper(d(fn), fn)
+    # and: decorator = decorator(decorator)
 
 
 @decorator

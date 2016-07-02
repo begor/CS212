@@ -34,9 +34,9 @@ def genseq(x, y, Ns, startx=0):
         return null
 
     xmatches = x(set(range(startx, max(Ns) + 1)))
-    Ns_x = set(len(m) for m in xmatches)
-    Ns_y = set(n - m for n in Ns for m in Ns_x if n - m >= 0)
-    ymatches = y(Ns_y)
+    Ns_for_x = set(len(m) for m in xmatches)
+    Ns_for_y = set(n - m for n in Ns for m in Ns_x if n - m >= 0)
+    ymatches = y(Ns_for_y)
     return set(m1 + m2 for m1 in xmatches for m2 in ymatches
                if len(m1 + m2) in Ns)
 

@@ -1,6 +1,40 @@
 from functools import update_wrapper
 import re
 
+def inverse(f, delta = 1/128.):
+    """Given a function y = f(x) that is a monotonically increasing function on
+    non-negatve numbers, return the function x = f_1(y) that is an approximate
+    inverse, picking the closest value to the inverse, within delta."""
+    def find_bounds(x, y):
+        """Find bounds in which f(x) equals y."""
+        while f(x) < y:
+            x *= 2
+        return 0 if x == 1 else x / 2, x
+
+    def search_btw_bounds(lo, hi, y):
+        """Search a value y between bounds lo and hi."""
+        while lo <= hi:
+            x = (lo + hi) / 2
+            if f(x) < y:
+                lo += delta
+            elif f(x) > y:
+                hi -= delta
+            else:
+                return x
+
+        return hi if (f(hi)-y < y-f(lo)) else lo
+
+    def f_1(y):
+        x = 1
+        lo, hi = find_bounds(x, y)
+        return search_btw_bounds(lo, hi, y)
+    return f_1 
+
+
+def square(x): return x*x
+sqrt = inverse(square)
+print(sqrt(1000000))
+
 
 def grammar(description, whitespace=r'\s*'):
     """Convert a description to a grammar.  Each line is a rule for a

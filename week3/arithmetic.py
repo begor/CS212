@@ -31,7 +31,8 @@ def parse(start_symbol, text, grammar):
             return Fail
         else:  # Terminal: match characters against start of text
             m = re.match(tokenizer % atom, text)
-            return Fail if (not m) else (m.group(1), text[m.end():])
+            # return match and a remainder, the only place where text is advancing
+            return Fail if (not m) else (m.group(1), text[m.end():]) 
 
     # Body of parse:
     return parse_atom(start_symbol, text)

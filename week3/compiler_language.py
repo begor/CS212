@@ -11,7 +11,8 @@ def lit(s):
 
 
 def seq(x, y):
-    return lambda text: set().union(*map(y, x(text)))
+    return lambda text: set(t2 for t1 in x(text) for t2 in y(text))
+    # return lambda text: set().union(*map(y, x(text)))
 
 
 def alt(x, y):

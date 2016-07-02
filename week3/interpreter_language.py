@@ -14,11 +14,6 @@ def match(pattern, text):
     remainders = matchset(pattern, text)
     if remainders:
         shortest = min(remainders, key=len)
-        """
-            If there is a remainder, we return text before it
-            If there isn't, if seems that there is no remainder at all
-            And we should return all the text, cause it's matches the pattern
-        """
         return text[:len(text)-len(shortest)]
 
 
