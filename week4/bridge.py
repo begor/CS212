@@ -5,25 +5,29 @@ def bsuccessors(state):
     as a tuple (person1, person2, arrow), where arrow is '->' for here to there and 
     '<-' for there to here."""
     here, there, t = state
-    if 'light' in here:
-        people_h = here - {'light'}
-        people_t = frozenset().union(there, {'light'})
-        return {(frozenset(people_h - {p}), frozenset().union({p}, people_t), t + p): (p, p, '->')
-                for p in people_h}
+    l = 'light'
+    if l in here:
+        return {(here - frozenset([a, b, l]),
+                 there | frozenset([a, b, l]),
+                 t + max(a, b)): (a, b, '->')
+                for a in here if a is not l
+                for b in here if b is not l}
     else:
-        people_t = there - {'light'}
-        people_h = frozenset().union(here, {'light'})
-        return {(frozenset().union({p}, people_h), frozenset(people_t - {p}), t + p): (p, p, '<-')
-                for p in people_t}
+        return {(here | frozenset([a, b, l]),
+                 there - frozenset([a, b, l]),
+                 t + max(a, b)): (a, b, '<-')
+                for a in there if a is not l
+                for b in there if b is not l}
+
 
 def test():
 
     assert bsuccessors((frozenset([1, 'light']), frozenset([]), 3)) == {
-                (frozenset([]), frozenset([1, 'light']), 4): (1, 1, '->')}
+        (frozenset([]), frozenset([1, 'light']), 4): (1, 1, '->')}
 
-    assert bsuccessors((frozenset([]), frozenset([2, 'light']), 0)) =={
-                (frozenset([2, 'light']), frozenset([]), 2): (2, 2, '<-')}
-    
+    assert bsuccessors((frozenset([]), frozenset([2, 'light']), 0)) == {
+        (frozenset([2, 'light']), frozenset([]), 2): (2, 2, '<-')}
+
     return 'tests pass'
 
 print test()
