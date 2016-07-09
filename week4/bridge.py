@@ -30,6 +30,35 @@ def path_actions(path):
     return path[1::2]
 
 
+def elapsed_time(path):
+    return path[-1][2]
+
+
+def bridge_problem(here):
+    """Modify this to test for goal later: after pulling a state off frontier,
+    not when we are about to put it on the frontier."""
+    # modify code below
+    here = frozenset(here) | frozenset(['light'])
+    explored = set()  # set of states we have visited
+    # State will be a (people-here, people-there, time-elapsed)
+    # ordered list of paths we have blazed
+    frontier = [[(here, frozenset(), 0)]]
+    if not here:
+        return frontier[0]
+    while frontier:
+        path = frontier.pop(0)
+        here = path[-1][0]
+        if not here:
+            return path
+        for (state, action) in bsuccessors(path[-1]).items():
+            if state not in explored:
+                explored.add(state)
+                path2 = path + [action, state]
+                frontier.append(path2)
+                frontier.sort(key=elapsed_time)
+    return []
+
+
 def test():
 
     assert bsuccessors((frozenset([1, 'light']), frozenset([]), 3)) == {
@@ -90,6 +119,9 @@ def test():
                                       (5, 1, '->'),
                                       (1, 1, '->')]
 
+    assert bridge_problem(frozenset((1, 2),))[-1][-1] == 2 # the [-1][-1] grabs the total elapsed time
+    assert bridge_problem(frozenset((1, 2, 5, 10),))[-1][-1] == 17
+    
     return 'tests pass'
 
 print test()
