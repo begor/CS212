@@ -22,12 +22,12 @@ def bsuccessors(state):
 
 def path_states(path):
     "Return a list of states in this path."
-    return [state for state, _ in zip(path[::2], path[1::2])]
+    return path[::2]
 
 
 def path_actions(path):
     "Return a list of actions in this path."
-    return [action for _, action in zip(path[::2], path[1::2])]
+    return path[1::2]
 
 
 def test():
