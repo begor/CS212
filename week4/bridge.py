@@ -1,3 +1,5 @@
+import doctest
+
 def bsuccessors(state):
     """Return a dict of {state:action} pairs. A state is a (here, there, t) tuple,
     where here and there are frozensets of people (indicated by their times) and/or
@@ -121,7 +123,40 @@ def test():
 
     assert bridge_problem(frozenset((1, 2),))[-1][-1] == 2 # the [-1][-1] grabs the total elapsed time
     assert bridge_problem(frozenset((1, 2, 5, 10),))[-1][-1] == 17
-    
+
     return 'tests pass'
 
-print test()
+class TestBridge: """
+>>> elapsed_time(bridge_problem([1,2,5,10]))
+17
+
+## There are two equally good solutions
+>>> S1 = [(2, 1, '->'), (1, 1, '<-'), (5, 10, '->'), (2, 2, '<-'), (2, 1, '->')]
+>>> S2 = [(2, 1, '->'), (2, 2, '<-'), (5, 10, '->'), (1, 1, '<-'), (2, 1, '->')]
+>>> path_actions(bridge_problem([1,2,5,10])) in (S1, S2)
+True
+
+## Try some other problems
+>>> path_actions(bridge_problem([1,2,5,10,15,20]))
+[(2, 1, '->'), (1, 1, '<-'), (10, 5, '->'), (2, 2, '<-'), (2, 1, '->'), (1, 1, '<-'), (15, 20, '->'), (2, 2, '<-'), (2, 1, '->')]
+
+>>> path_actions(bridge_problem([1,2,4,8,16,32]))
+[(2, 1, '->'), (1, 1, '<-'), (8, 4, '->'), (2, 2, '<-'), (1, 2, '->'), (1, 1, '<-'), (16, 32, '->'), (2, 2, '<-'), (2, 1, '->')]
+
+>>> [elapsed_time(bridge_problem([1,2,4,8,16][:N])) for N in range(6)]
+[0, 1, 2, 7, 15, 28]
+
+>>> [elapsed_time(bridge_problem([1,1,2,3,5,8,13,21][:N])) for N in range(8)]
+[0, 1, 1, 2, 6, 12, 19, 30]
+
+>>> path_actions(bridge_problem([1, 2]))
+[(2, 1, '->')]
+
+
+>>> elapsed_time(bridge_problem([1, 2]))
+2
+
+"""
+
+print(doctest.testmod())
+print(test())
