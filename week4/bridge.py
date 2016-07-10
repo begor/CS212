@@ -1,10 +1,30 @@
 import doctest
 
+
+def bsuccessors2(state):
+    """Return a dict of {state:action} pairs. A state is a
+    (here, there) tuple, where here and there are frozensets
+    of people (indicated by their travel times) and/or the light."""
+    # your code here
+    here, there = state
+    l = 'light'
+    if l in here:
+        return {(here - frozenset([a, b, l]),
+                 there | frozenset([a, b, l])): (a, b, '->')
+                for a in here if a is not l
+                for b in here if b is not l}
+    else:
+        return {(here | frozenset([a, b, l]),
+                 there - frozenset([a, b, l])): (a, b, '<-')
+                for a in there if a is not l
+                for b in there if b is not l}
+
+
 def bsuccessors(state):
     """Return a dict of {state:action} pairs. A state is a (here, there, t) tuple,
     where here and there are frozensets of people (indicated by their times) and/or
     the 'light', and t is a number indicating the elapsed time. Action is represented
-    as a tuple (person1, person2, arrow), where arrow is '->' for here to there and 
+    as a tuple (person1, person2, arrow), where arrow is '->' for here to there and
     '<-' for there to here."""
     here, there, t = state
     l = 'light'
@@ -121,42 +141,25 @@ def test():
                                       (5, 1, '->'),
                                       (1, 1, '->')]
 
-    assert bridge_problem(frozenset((1, 2),))[-1][-1] == 2 # the [-1][-1] grabs the total elapsed time
+    # the [-1][-1] grabs the total elapsed time
+    assert bridge_problem(frozenset((1, 2),))[-1][-1] == 2
     assert bridge_problem(frozenset((1, 2, 5, 10),))[-1][-1] == 17
+
+    here1 = frozenset([1, 'light'])
+    there1 = frozenset([])
+
+    here2 = frozenset([1, 2, 'light'])
+    there2 = frozenset([3])
+
+    assert bsuccessors2((here1, there1)) == {
+        (frozenset([]), frozenset([1, 'light'])): (1, 1, '->')}
+    assert bsuccessors2((here2, there2)) == {
+        (frozenset([1]), frozenset(['light', 2, 3])): (2, 2, '->'),
+        (frozenset([2]), frozenset([1, 3, 'light'])): (1, 1, '->'),
+        (frozenset([]), frozenset([1, 2, 3, 'light'])): (2, 1, '->')}
+    return 'tests pass'
 
     return 'tests pass'
 
-class TestBridge: """
->>> elapsed_time(bridge_problem([1,2,5,10]))
-17
 
-## There are two equally good solutions
->>> S1 = [(2, 1, '->'), (1, 1, '<-'), (5, 10, '->'), (2, 2, '<-'), (2, 1, '->')]
->>> S2 = [(2, 1, '->'), (2, 2, '<-'), (5, 10, '->'), (1, 1, '<-'), (2, 1, '->')]
->>> path_actions(bridge_problem([1,2,5,10])) in (S1, S2)
-True
-
-## Try some other problems
->>> path_actions(bridge_problem([1,2,5,10,15,20]))
-[(2, 1, '->'), (1, 1, '<-'), (10, 5, '->'), (2, 2, '<-'), (2, 1, '->'), (1, 1, '<-'), (15, 20, '->'), (2, 2, '<-'), (2, 1, '->')]
-
->>> path_actions(bridge_problem([1,2,4,8,16,32]))
-[(2, 1, '->'), (1, 1, '<-'), (8, 4, '->'), (2, 2, '<-'), (1, 2, '->'), (1, 1, '<-'), (16, 32, '->'), (2, 2, '<-'), (2, 1, '->')]
-
->>> [elapsed_time(bridge_problem([1,2,4,8,16][:N])) for N in range(6)]
-[0, 1, 2, 7, 15, 28]
-
->>> [elapsed_time(bridge_problem([1,1,2,3,5,8,13,21][:N])) for N in range(8)]
-[0, 1, 1, 2, 6, 12, 19, 30]
-
->>> path_actions(bridge_problem([1, 2]))
-[(2, 1, '->')]
-
-
->>> elapsed_time(bridge_problem([1, 2]))
-2
-
-"""
-
-print(doctest.testmod())
 print(test())
