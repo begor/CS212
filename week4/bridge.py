@@ -1,6 +1,3 @@
-import doctest
-
-
 def bsuccessors2(state):
     """Return a dict of {state:action} pairs. A state is a
     (here, there) tuple, where here and there are frozensets
@@ -40,6 +37,26 @@ def bsuccessors(state):
                  t + max(a, b)): (a, b, '<-')
                 for a in there if a is not l
                 for b in there if b is not l}
+
+
+def path_cost(path):
+    """The total cost of a path (which is stored in a tuple
+    with the final action."""
+    # path = (state, (action, total_cost), state, ... )
+    if len(path) < 3:
+        return 0
+    else:
+        return path[-2][1]
+
+
+def bcost(action):
+    """Returns the cost (a number) of an action in the
+    bridge problem.
+    An action is an (a, b, arrow) tuple; a and b are
+    times; arrow is a string.
+    """
+    a, b, arrow = action
+    return max(a, b)
 
 
 def path_states(path):
@@ -157,8 +174,12 @@ def test():
         (frozenset([1]), frozenset(['light', 2, 3])): (2, 2, '->'),
         (frozenset([2]), frozenset([1, 3, 'light'])): (1, 1, '->'),
         (frozenset([]), frozenset([1, 2, 3, 'light'])): (2, 1, '->')}
-    return 'tests pass'
 
+    assert path_cost(('fake_state1', ((2, 5, '->'), 5), 'fake_state2')) == 5
+    assert path_cost(('fs1', ((2, 1, '->'), 2), 'fs2',
+                      ((3, 4, '<-'), 6), 'fs3')) == 6
+    assert bcost((4, 2, '->'),) == 4
+    assert bcost((3, 10, '<-'),) == 10
     return 'tests pass'
 
 
