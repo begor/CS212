@@ -39,6 +39,25 @@ def bsuccessors(state):
                 for b in there if b is not l}
 
 
+
+def add_to_frontier(frontier, path):
+    "Add path to frontier, replacing costlier path if there is one."
+    # (This could be done more efficiently.)
+    # Find if there is an old path to the final state of this path.
+    old = None
+    for i,p in enumerate(frontier):
+        if final_state(p) == final_state(path):
+            old = i
+            break
+    if old is not None and path_cost(frontier[old]) < path_cost(path):
+        return # Old path was better; do nothing
+    elif old is not None:
+        del frontier[old] # Old path was worse; delete it
+    ## Now add the new path and re-sort
+    frontier.append(path)
+    frontier.sort(key=path_cost)
+
+
 def path_cost(path):
     """The total cost of a path (which is stored in a tuple
     with the final action."""

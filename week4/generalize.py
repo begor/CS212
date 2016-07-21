@@ -1,9 +1,10 @@
 from cannibals import csuccessors
+from bridge import add_to_frontier
 
 
 def mc_problem2(start=(3, 3, 1, 0, 0, 0), goal=None):
     return shortest_path_search(start, csuccessors,
-    	lambda state: state == (goal or (0, 0, 0) + start[:3]))
+                                lambda state: state == (goal or (0, 0, 0) + start[:3]))
 
 
 def shortest_path_search(start, successors, is_goal):
@@ -29,6 +30,37 @@ def shortest_path_search(start, successors, is_goal):
                 else:
                     frontier.append(new_path)
     return Fail
+
+
+def lowest_cost_search(start, successors, is_goal, action_cost):
+    """Return the lowest cost path, starting from start state,
+    and considering successors(state) => {state:action,...},
+    that ends in a state for which is_goal(state) is true,
+    where the cost of a path is the sum of action costs,
+    which are given by action_cost(action)."""
+    if is_goal(start):
+        return [start]
+
+    explored, frontier = set(), [[start]]
+
+    while frontier:
+        path = frontier.pop(0)
+        here1, there1 = state1 = final_state(path)
+        if not here1:
+            return path
+        explored.add(state1)
+        pcost = action_cost(path)
+        for (state, action) in successors(state1).items():
+            if state not in explored:
+                total_cost = pcost + action_cost(action)
+                path2 = path + [(action, total_cost), state]
+                add_to_frontier(frontier, path2)
+
+    return Fail
+
+
+def final_state(path):
+    return path[-1]
 
 
 def test():
