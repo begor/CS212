@@ -54,12 +54,14 @@ def csuccessors_mine(state):
         return {}
 
     if B1 > 0:
-        return {((M1 - m), (C1 - c), B1 - 1, M2 + m, C2 + c, B2 + 1): 'M' * m + 'C' * c + '->'
+        return {((M1 - m), (C1 - c), B1 - 1, M2 + m, C2 + c, B2 + 1):
+                'M' * m + 'C' * c + '->'
                 for m in range(M1 + 1)
                 for c in range(C1 + 1) if 0 < m + c < 3}
 
     if B2 > 0:
-        return {(M1 + m, C1 + c, B1 + 1, M2 - m, C2 - c, B2 - 1): '<-' + 'M' * m + 'C' * c
+        return {(M1 + m, C1 + c, B1 + 1, M2 - m, C2 - c, B2 - 1):
+                '<-' + 'M' * m + 'C' * c
                 for m in range(M2 + 1)
                 for c in range(C2 + 1) if 0 < m + c < 3}
 
