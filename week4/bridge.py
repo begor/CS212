@@ -39,6 +39,9 @@ def bsuccessors(state):
                 for b in there if b is not l}
 
 
+def final_state(path):
+    return path[-1]
+
 
 def add_to_frontier(frontier, path):
     "Add path to frontier, replacing costlier path if there is one."

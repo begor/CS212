@@ -1,5 +1,5 @@
 from cannibals import csuccessors
-from bridge import add_to_frontier, path_cost
+from bridge import add_to_frontier, path_cost, bsuccessors2, bcost, final_state
 
 
 Fail = []
@@ -60,8 +60,18 @@ def lowest_cost_search(start, successors, is_goal, action_cost):
     return Fail
 
 
-def final_state(path):
-    return path[-1]
+
+
+def bridge_problem3(here):
+    """Find the fastest (least elapsed time) path to 
+    the goal in the bridge problem."""
+    # your code here
+    def is_goal(state):
+        here, there = state
+        return not here or here == set(['light'])
+
+    start = (frozenset(here) | frozenset(['light']), frozenset())
+    return lowest_cost_search(start, bsuccessors2, is_goal, bcost)
 
 
 def test():
@@ -95,6 +105,19 @@ def test():
                              (0, 1, 0, 3, 2, 1), '<-C',
                              (0, 2, 1, 3, 1, 0), 'CC->',
                              (0, 0, 0, 3, 3, 1)]
-    return 'tests pass'
+    here = [1, 2, 5, 10]
+    assert bridge_problem3(here) == [
+            (frozenset([1, 2, 'light', 10, 5]), frozenset([])), 
+            ((2, 1, '->'), 2), 
+            (frozenset([10, 5]), frozenset([1, 2, 'light'])), 
+            ((2, 2, '<-'), 4), 
+            (frozenset(['light', 10, 2, 5]), frozenset([1])), 
+            ((5, 10, '->'), 14), 
+            (frozenset([2]), frozenset([1, 10, 5, 'light'])), 
+            ((1, 1, '<-'), 15), 
+            (frozenset([1, 2, 'light']), frozenset([10, 5])), 
+            ((2, 1, '->'), 17), 
+            (frozenset([]), frozenset([1, 10, 2, 5, 'light']))]
+    return 'test passes'
 
 print(test())
